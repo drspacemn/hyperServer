@@ -1,12 +1,26 @@
 var express = require('express');
 var router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.redirect('/index.html');
+var firebase = require("firebase");
+firebase.initializeApp({
+  serviceAccount: "./HyperBot-c52ccadf3e05.json",
+  databaseURL: "https://hyperbot-d6494.firebaseio.com"
 });
-router.get('/index.html', function(req, res, next){
-	res.send("blah blach blah index");
+
+var iPhoneref = firebase.database().ref().child('iPhoneHyper');
+/* GET home page. */
+iPhoneref.on('value', function(snap){
+  console.log(snap.val());
 })
+
+var goProref = firebase.database().ref().child('goProHyper');
+
+goProref.on('value', function(snap){
+  console.log(snap.val())
+})
+
+
+router.get('/', function(req, res, next) {
+  res.render('index', { title: 'Express' });
+});
 
 module.exports = router;
